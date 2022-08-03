@@ -8,7 +8,7 @@
 import Foundation
 
 public struct Student {
-    init() { }
+    public init() { }
     
     var studentId: String?
     var customerMobile: String?
