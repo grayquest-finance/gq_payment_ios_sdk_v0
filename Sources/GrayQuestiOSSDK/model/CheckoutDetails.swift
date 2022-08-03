@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CheckoutDetails {
+public struct CheckoutDetails {
     var order_id: String?
     var razorpay_key: String?
     var recurring: Bool?

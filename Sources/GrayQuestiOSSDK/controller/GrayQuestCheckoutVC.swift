@@ -8,16 +8,17 @@
 import UIKit
 import WebKit
 
-class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessageHandler, WKNavigationDelegate, CheckoutControllerDelegate{
+public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessageHandler, WKNavigationDelegate, CheckoutControllerDelegate{
     var webView: WKWebView!
     var student: Student?
     var checkout_details: CheckoutDetails?
     
+    var delegate: GQPaymentDelegate?
     
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+    
+    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         decisionHandler(.allow)
         guard let urlAsString = navigationAction.request.url?.absoluteString.lowercased() else {
-            print("In else")
             return
         }
         if (!urlAsString.contains("cashfree.com")) {return}
@@ -40,16 +41,17 @@ class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessageHandle
        return nil
    }
 
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+    public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if (message.name == "sdkSuccess") {
-            print("Message1 - \(message.body)")
+            print("sdkSuccess - \(message.body) \(type(of: message.body))")
+            
         } else if (message.name == "sdkError") {
-            print("Message2 - \(message.body)")
+            print("sdkError - \(message.body)")
         } else if (message.name == "sdkCancel") {
-            print("Message3 - \(message.body)")
-            // close sdk after Message3 - {"message":"SDK Closed","status":true}
+            print("sdkCancel - \(message.body)")
+            self.dismiss(animated: true, completion: nil)
         } else if (message.name == "sendADOptions") {
-            print("Message4 - \(message.body)")
+            print("sendADOptions - \(message.body)")
             let xyz = convertStringToDictionary(text: message.body as! String)
             let razorpay_key = xyz!["key"]
             let order_id = xyz!["order_id"]
@@ -59,11 +61,8 @@ class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessageHandle
             let customer_id = xyz!["customer_id"]
             let recurring_flag: Bool?
             
-            if (recurring as! String == "1") {
-                recurring_flag = true
-            } else {
-                recurring_flag = false
-            }
+            if (recurring as! String == "1") { recurring_flag = true }
+            else { recurring_flag = false }
             
             checkout_details = CheckoutDetails(order_id: order_id as? String, razorpay_key: (razorpay_key as! String), recurring: recurring_flag, notes: (notes as? [String : Any]), customer_id: (customer_id as! String), callback_url: (callback_url as! String))
             
@@ -73,10 +72,10 @@ class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessageHandle
             newViewController.delegate = self
             self.present(newViewController, animated: true, completion: nil)
         }
-        print("Hello _> \(message.body)")
+        print("Received message from web -> \(message.body)")
     }
     
-    override func loadView() {
+    public override func loadView() {
         let webConfiguration = WKWebViewConfiguration()
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
         webView.configuration.userContentController.add(self, name: "Gqsdk")
@@ -90,7 +89,7 @@ class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessageHandle
         view = webView
     }
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         initialSetup()
@@ -126,7 +125,7 @@ class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessageHandle
         }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    public override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "vcrazorpay"{
             print("Hello World3")
         }

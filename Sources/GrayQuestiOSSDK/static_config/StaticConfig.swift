@@ -1,0 +1,19 @@
+//
+//  File.swift
+//  
+//
+//  Created by admin on 02/08/22.
+//
+
+import Foundation
+
+
+public struct StaticConfig {
+    static var devBaseUrl = "https://erp-api.graydev.tech/"
+    static var prodBaseUrl = "https://erp-api.graydev.com/"
+    static var baseUrl = devBaseUrl
+    static var gqAPIKey = "9db4fc333d8bcf7fee98804105d9fc0c85199d77"
+    static var aBase = "MzU0NTk4ZmQtNTc1YS00YzFmLWE2ZTMtZTA4ZmM1ZWEwNmQzOjJlYjM0OTczMjU5NGZlNzc3YmUwNzlmYjNjN2U1NTcxOTRmNTVhMTQ="
+    static var createCustomerUrl = baseUrl + "v1/customer/create-customer"
+    static var checkElegibility = "https://erp-sdk.graydev.tech/instant-eligibility/"
+}

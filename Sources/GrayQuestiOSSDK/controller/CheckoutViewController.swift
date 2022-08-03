@@ -8,14 +8,14 @@
 import UIKit
 import Razorpay
 
-class CheckoutViewController: UIViewController, RazorpayPaymentCompletionProtocolWithData {
+public class CheckoutViewController: UIViewController, RazorpayPaymentCompletionProtocolWithData {
     
     var razorpay : RazorpayCheckout? = nil
     var checkout_details: CheckoutDetails?
     
     var delegate: CheckoutControllerDelegate?
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         if (checkout_details?.razorpay_key == nil) {
@@ -24,7 +24,7 @@ class CheckoutViewController: UIViewController, RazorpayPaymentCompletionProtoco
         razorpay = RazorpayCheckout.initWithKey(checkout_details?.razorpay_key ?? "", andDelegateWithData: self)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    public override func viewDidAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
         self.showPaymentForm()
     }
@@ -43,13 +43,13 @@ class CheckoutViewController: UIViewController, RazorpayPaymentCompletionProtoco
     }
     
     public func onPaymentError(_ code: Int32, description str: String, andData response: [AnyHashable : Any]?) {
-        print("COOL!")
+        print("Payment Error!")
         self.delegate?.checkoutControllerFailureResponse(data: response)
         self.dismiss(animated: true, completion: nil)
     }
 
     public func onPaymentSuccess(_ payment_id: String, andData response: [AnyHashable : Any]?) {
-        print("COOL")
+        print("Payment Success")
         self.delegate?.checkoutControllerSuccessResponse(data: response)
         self.dismiss(animated: true, completion: nil)
     }
