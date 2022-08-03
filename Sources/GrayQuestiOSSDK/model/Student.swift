@@ -8,6 +8,8 @@
 import Foundation
 
 public struct Student {
+    init() { }
+    
     var studentId: String?
     var customerMobile: String?
     var feeAmount: String?

@@ -64,7 +64,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             if (recurring as! String == "1") { recurring_flag = true }
             else { recurring_flag = false }
             
-            checkout_details = CheckoutDetails(order_id: order_id as? String, razorpay_key: (razorpay_key as! String), recurring: recurring_flag, notes: (notes as? [String : Any]), customer_id: (customer_id as! String), callback_url: (callback_url as! String))
+            checkout_details = CheckoutDetails(order_id: order_id as? String ?? "", razorpay_key: (razorpay_key as! String), recurring: recurring_flag ?? true, notes: (notes as? [String : Any] ?? ["nil": "nil"]), customer_id: (customer_id as! String), callback_url: (callback_url as! String))
             
             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let newViewController = storyBoard.instantiateViewController(withIdentifier: "vcrazorpay") as! CheckoutViewController
