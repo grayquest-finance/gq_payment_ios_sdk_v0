@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Student {
+public struct Student {
     var studentId: String?
     var customerMobile: String?
     var feeAmount: String?
