@@ -23,7 +23,7 @@ class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessageHandle
         if (!urlAsString.contains("cashfree.com")) {return}
         print("URL as string \(urlAsString)")
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let newViewController = storyBoard.instantiateViewController(withIdentifier: "vcpayment") as! ViewControllerPayment
+        let newViewController = storyBoard.instantiateViewController(withIdentifier: "vcpayment") as! GrayQuestPaymentVC
         newViewController.paymentURL = urlAsString
         self.present(newViewController, animated: true, completion: nil)
      }

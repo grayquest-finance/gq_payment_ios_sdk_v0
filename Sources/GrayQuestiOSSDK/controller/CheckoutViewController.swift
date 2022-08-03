@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Razorpay
 
 class CheckoutViewController: UIViewController, RazorpayPaymentCompletionProtocolWithData {
     
