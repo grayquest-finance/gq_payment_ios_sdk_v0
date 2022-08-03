@@ -10,6 +10,8 @@ import Foundation
 public struct Student {
     public init() { }
     
+    public init(studentId: String?, customerMobile: String?, feeAmount: String?, payableAmount: String?, env: String?, feeEditable: String?, customerId: String?, customerCode: String?, userType: String?) {}
+    
     var studentId: String?
     var customerMobile: String?
     var feeAmount: String?
