@@ -12,15 +12,15 @@ public struct Student {
     
     public init(studentId: String?, customerMobile: String?, feeAmount: String?, payableAmount: String?, env: String?, feeEditable: String?, customerId: String?, customerCode: String?, userType: String?) {}
     
-    var studentId: String?
-    var customerMobile: String?
-    var feeAmount: String?
-    var payableAmount: String?
-    var env: String?
-    var feeEditable: String?
-    var customerId: String?
-    var customerCode: String?
-    var themeColor: String?
-    var s = "asdk"
-    var userType: String?
+    public var studentId: String?
+    public var customerMobile: String?
+    public var feeAmount: String?
+    public var payableAmount: String?
+    public var env: String?
+    public var feeEditable: String?
+    public var customerId: String?
+    public var customerCode: String?
+    public var themeColor: String?
+    public var s = "asdk"
+    public var userType: String?
 }
