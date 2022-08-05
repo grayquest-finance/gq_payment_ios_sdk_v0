@@ -14,7 +14,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     
     public var student: Student?
     var checkout_details: CheckoutDetails?
-    var delegate: GQPaymentDelegate?
+    public var delegate: GQPaymentDelegate?
     
     
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
