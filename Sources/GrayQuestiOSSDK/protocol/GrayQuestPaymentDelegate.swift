@@ -10,7 +10,7 @@ import Foundation
 
 public protocol GQPaymentDelegate
 {
-    func gqSuccessResponse(data: NSDictionary?)
+    func gqSuccessResponse(data: [String: Any]?)
     
     func gqFailureResponse(data: NSDictionary?)
 }
