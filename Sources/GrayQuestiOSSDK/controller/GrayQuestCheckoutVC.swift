@@ -44,8 +44,9 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if (message.name == "sdkSuccess") {
             print("sdkSuccess - \(message.body) \(type(of: message.body))")
-            let data = message.body as! NSDictionary?
-            delegate?.gqSuccessResponse(data: data)
+            let data = message.body as! String
+            print("Data \(data)")
+//            delegate?.gqSuccessResponse(data: data)
         } else if (message.name == "sdkError") {
             print("sdkError - \(message.body)")
             let data = message.body as! NSDictionary?
