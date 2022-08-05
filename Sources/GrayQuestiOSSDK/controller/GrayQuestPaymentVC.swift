@@ -19,8 +19,6 @@ class GrayQuestPaymentVC: UIViewController, WKUIDelegate, WKScriptMessageHandler
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        
     }
     
     override func willMove(toParent: UIViewController? ) {
@@ -40,8 +38,6 @@ class GrayQuestPaymentVC: UIViewController, WKUIDelegate, WKScriptMessageHandler
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
         webView.configuration.preferences.javaScriptEnabled = true
         webView.navigationDelegate = self
-        webView.uiDelegate = self
-        
         webView.uiDelegate = self
         view = webView
         

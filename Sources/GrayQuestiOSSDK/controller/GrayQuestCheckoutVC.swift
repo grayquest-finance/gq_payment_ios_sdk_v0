@@ -8,11 +8,12 @@
 import UIKit
 import WebKit
 
-public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessageHandler, WKNavigationDelegate, CheckoutControllerDelegate{
+public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessageHandler, WKNavigationDelegate, CheckoutControllerDelegate {
+    
     var webView: WKWebView!
+    
     public var student: Student?
     var checkout_details: CheckoutDetails?
-    
     var delegate: GQPaymentDelegate?
     
     

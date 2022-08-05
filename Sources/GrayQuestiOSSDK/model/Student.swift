@@ -10,7 +10,17 @@ import Foundation
 public struct Student {
     public init() { }
     
-    public init(studentId: String?, customerMobile: String?, feeAmount: String?, payableAmount: String?, env: String?, feeEditable: String?, customerId: String?, customerCode: String?, userType: String?) {}
+    public init(studentId: String?, customerMobile: String?, feeAmount: String?, payableAmount: String?, env: String?, feeEditable: String?, customerId: String?, customerCode: String?, userType: String?) {
+        self.studentId = studentId
+        self.customerMobile = customerMobile
+        self.feeAmount = feeAmount
+        self.payableAmount = payableAmount
+        self.env = env
+        self.feeEditable = feeEditable
+        self.customerId = customerId
+        self.customerCode = customerCode
+        self.userType = userType
+    }
     
     public var studentId: String?
     public var customerMobile: String?
