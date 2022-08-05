@@ -24,8 +24,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
         }
         if (!urlAsString.contains("cashfree.com")) {return}
         print("URL as string \(urlAsString)")
-        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let newViewController = storyBoard.instantiateViewController(withIdentifier: "vcpayment") as! GrayQuestPaymentVC
+        let newViewController = GrayQuestPaymentVC()
         newViewController.paymentURL = urlAsString
         self.present(newViewController, animated: true, completion: nil)
      }
@@ -70,8 +69,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             
             checkout_details = CheckoutDetails(order_id: order_id as? String ?? "", razorpay_key: (razorpay_key as! String), recurring: recurring_flag ?? true, notes: (notes as? [String : Any] ?? ["nil": "nil"]), customer_id: (customer_id as! String), callback_url: (callback_url as! String))
             
-            let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let newViewController = storyBoard.instantiateViewController(withIdentifier: "vcrazorpay") as! CheckoutViewController
+            let newViewController = CheckoutViewController()
             newViewController.checkout_details = checkout_details
             newViewController.delegate = self
             self.present(newViewController, animated: true, completion: nil)
