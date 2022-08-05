@@ -10,7 +10,7 @@ import Foundation
 
 public protocol GQPaymentDelegate
 {
-    func gqSuccessResponse(data: [AnyHashable : Any]?)
+    func gqSuccessResponse(data: NSDictionary?)
     
-    func gqFailureResponse(data: [AnyHashable : Any]?)
+    func gqFailureResponse(data: NSDictionary?)
 }

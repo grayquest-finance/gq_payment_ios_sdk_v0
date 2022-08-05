@@ -44,21 +44,24 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if (message.name == "sdkSuccess") {
             print("sdkSuccess - \(message.body) \(type(of: message.body))")
-            
+            let data = message.body as! NSDictionary?
+            delegate?.gqSuccessResponse(data: data)
         } else if (message.name == "sdkError") {
             print("sdkError - \(message.body)")
+            let data = message.body as! NSDictionary?
+            delegate?.gqFailureResponse(data: data)
         } else if (message.name == "sdkCancel") {
             print("sdkCancel - \(message.body)")
             self.dismiss(animated: true, completion: nil)
         } else if (message.name == "sendADOptions") {
             print("sendADOptions - \(message.body)")
-            let xyz = convertStringToDictionary(text: message.body as! String)
-            let razorpay_key = xyz!["key"]
-            let order_id = xyz!["order_id"]
-            let callback_url = xyz!["callback_url"]
-            let recurring = xyz!["recurring"]
-            let notes = xyz!["notes"]
-            let customer_id = xyz!["customer_id"]
+            let ad_data = convertStringToDictionary(text: message.body as! String)
+            let razorpay_key = ad_data!["key"]
+            let order_id = ad_data!["order_id"]
+            let callback_url = ad_data!["callback_url"]
+            let recurring = ad_data!["recurring"]
+            let notes = ad_data!["notes"]
+            let customer_id = ad_data!["customer_id"]
             let recurring_flag: Bool?
             
             if (recurring as! String == "1") { recurring_flag = true }
@@ -92,13 +95,10 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        initialSetup()
+        if student == nil { self.dismiss(animated: true, completion: nil) }
         let response1 = validation1()
-        if (response1["error"] == "false") {
-            customer()
-        } else {
-            print("Error Validation 1 -> \(response1["message"] ?? "Hello Error")")
-        }
+        if (response1["error"] == "false") { customer() }
+        else { print("Error Validation 1 -> \(response1["message"] ?? "ViewDidLoad Error")") }
     }
     
     func checkoutControllerSuccessResponse(data: [AnyHashable : Any]?) {
@@ -129,18 +129,6 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
         if segue.identifier == "vcrazorpay"{
             print("Hello World3")
         }
-    }
-    
-    public func initialSetup() {
-        student = Student()
-        student?.studentId = "std_1212"
-        student?.customerMobile = "8425960199"
-        student?.feeAmount = "80000"
-        student?.payableAmount = "5000"
-        student?.env = "test"
-        student?.feeEditable = "false"
-        student?.customerId = "25417"
-        student?.userType = "existing"
     }
     
     public func validation1() -> [String: String] {
@@ -174,11 +162,9 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             
             DispatchQueue.main.async {
                 let message = responseObject["message"] as! String
-                if (message == "Customer Exists") {
-                    self.student?.userType = "existing"
-                } else {
-                    self.student?.userType = "new"
-                }
+                
+                if (message == "Customer Exists") { self.student?.userType = "existing" }
+                else { self.student?.userType = "new" }
                 
                 let data = responseObject["data"] as! [String:AnyObject]
                 self.student?.customerCode = (data["customer_code"] as! String)
