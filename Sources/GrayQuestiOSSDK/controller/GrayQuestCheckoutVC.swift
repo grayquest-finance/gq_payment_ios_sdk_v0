@@ -10,7 +10,7 @@ import WebKit
 
 public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessageHandler, WKNavigationDelegate, CheckoutControllerDelegate{
     var webView: WKWebView!
-    var student: Student?
+    public var student: Student?
     var checkout_details: CheckoutDetails?
     
     var delegate: GQPaymentDelegate?
