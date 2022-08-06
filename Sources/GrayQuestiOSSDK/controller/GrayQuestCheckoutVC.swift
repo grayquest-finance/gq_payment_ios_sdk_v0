@@ -108,7 +108,10 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
 
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+    }
+    
+    public override func viewDidAppear(_ animated: Bool) {
         if student == nil { self.dismiss(animated: true, completion: nil) }
         let response1 = validation1()
         if (response1["error"] == "false") { customer() }
