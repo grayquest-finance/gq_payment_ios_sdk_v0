@@ -150,15 +150,15 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     public func validation1() -> [String: String] {
         var errorMessage = ""
         
-        if (student?.studentId == nil) {
+        if ((student?.studentId?.isEmpty) != nil) {
             errorMessage += "Student ID cannot be null\n"
         }
         
-        if (student?.feeEditable == nil) {
+        if ((student?.feeEditable?.isEmpty) != nil) {
             errorMessage += "Fee Editable value not set\n"
         }
         
-        if (student?.env == nil) {
+        if ((student?.env?.isEmpty) != nil) {
             errorMessage += ""
         }
         
