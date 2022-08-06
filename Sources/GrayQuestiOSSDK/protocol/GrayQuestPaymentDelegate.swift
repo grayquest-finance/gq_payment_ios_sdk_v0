@@ -14,5 +14,5 @@ public protocol GQPaymentDelegate
     
     func gqFailureResponse(data: [String: Any]?)
     
-    func gqErrorResponse(data: [String: Any]?)
+    func gqErrorResponse(error: Bool, message: String)
 }

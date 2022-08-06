@@ -23,7 +23,6 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             return
         }
         if (!urlAsString.contains("cashfree.com")) {return}
-        print("URL as string \(urlAsString)")
         let newViewController = GrayQuestPaymentVC()
         newViewController.paymentURL = urlAsString
         self.present(newViewController, animated: true, completion: nil)
@@ -36,6 +35,8 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
                return json
            } catch {
                print("Something went wrong")
+               delegate?.gqErrorResponse(error: true, message: error.localizedDescription)
+               self.dismiss(animated: true, completion: nil)
            }
        }
        return nil
@@ -48,14 +49,22 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
                 let data = message.body as! String
                 let con = try JSONSerialization.jsonObject(with: data.data(using: .utf8)!, options: []) as! [String: Any]
                 delegate?.gqSuccessResponse(data: con)
-            } catch { print(error) }
+            } catch {
+                print(error)
+                delegate?.gqErrorResponse(error: true, message: error.localizedDescription)
+                self.dismiss(animated: true, completion: nil)
+            }
         } else if (message.name == "sdkError") {
             print("sdkError - \(message.body)")
             do {
                 let data = message.body as! String
                 let con = try JSONSerialization.jsonObject(with: data.data(using: .utf8)!, options: []) as! [String: Any]
                 delegate?.gqFailureResponse(data: con)
-            } catch { print(error) }
+            } catch {
+                print(error)
+                delegate?.gqErrorResponse(error: true, message: error.localizedDescription)
+                self.dismiss(animated: true, completion: nil)
+            }
         } else if (message.name == "sdkCancel") {
             print("sdkCancel - \(message.body)")
             self.dismiss(animated: true, completion: nil)
@@ -103,7 +112,11 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
         if student == nil { self.dismiss(animated: true, completion: nil) }
         let response1 = validation1()
         if (response1["error"] == "false") { customer() }
-        else { print("Error Validation 1 -> \(response1["message"] ?? "ViewDidLoad Error")") }
+        else {
+            print("Error Validation 1 -> \(response1["message"] ?? "ViewDidLoad Error")")
+            delegate?.gqErrorResponse(error: true, message: response1["message"] ?? "ViewDidLoad Error")
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
     func checkoutControllerSuccessResponse(data: [AnyHashable : Any]?) {
@@ -115,6 +128,8 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             webView.evaluateJavaScript("javascript:sendADPaymentResponse(\(jsonString!));")
         } catch {
             print("Error in checkoutControllerSuccessResponse => \(error)")
+            delegate?.gqErrorResponse(error: true, message: error.localizedDescription)
+            self.dismiss(animated: true, completion: nil)
         }
     }
     
@@ -127,12 +142,8 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             webView.evaluateJavaScript("javascript:sendADPaymentResponse(\(jsonString!));")
         } catch {
             print("Error in checkoutControllerFailureResponse => \(error)")
-        }
-    }
-    
-    public override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "vcrazorpay"{
-            print("Hello World3")
+            delegate?.gqErrorResponse(error: true, message: error.localizedDescription)
+            self.dismiss(animated: true, completion: nil)
         }
     }
     
@@ -195,7 +206,6 @@ extension WKWebView {
     func evaluate(script: String, completion: @escaping (Any?, Error?) -> Void) {
         var finished = false
 
-        print("Hello world")
         evaluateJavaScript(script, completionHandler: { (result, error) in
             if error == nil {
                 if result != nil {
