@@ -12,5 +12,7 @@ public protocol GQPaymentDelegate
 {
     func gqSuccessResponse(data: [String: Any]?)
     
-    func gqFailureResponse(data: NSDictionary?)
+    func gqFailureResponse(data: [String: Any]?)
+    
+    func gqErrorResponse(data: [String: Any]?)
 }

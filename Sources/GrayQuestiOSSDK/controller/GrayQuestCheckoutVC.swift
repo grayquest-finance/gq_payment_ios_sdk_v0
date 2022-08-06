@@ -48,13 +48,14 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
                 let data = message.body as! String
                 let con = try JSONSerialization.jsonObject(with: data.data(using: .utf8)!, options: []) as! [String: Any]
                 delegate?.gqSuccessResponse(data: con)
-            } catch {
-               print(error)
-            }
+            } catch { print(error) }
         } else if (message.name == "sdkError") {
             print("sdkError - \(message.body)")
-            let data = message.body as! NSDictionary?
-            delegate?.gqFailureResponse(data: data)
+            do {
+                let data = message.body as! String
+                let con = try JSONSerialization.jsonObject(with: data.data(using: .utf8)!, options: []) as! [String: Any]
+                delegate?.gqFailureResponse(data: con)
+            } catch { print(error) }
         } else if (message.name == "sdkCancel") {
             print("sdkCancel - \(message.body)")
             self.dismiss(animated: true, completion: nil)
