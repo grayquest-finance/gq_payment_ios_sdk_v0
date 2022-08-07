@@ -16,9 +16,9 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     var checkout_details: CheckoutDetails?
     public var delegate: GQPaymentDelegate?
     
-    public var client_id: String?
-    public var gq_api_key: String?
-    public var client_secret_key: String?
+    public var client_id: String = ""
+    public var gq_api_key: String = ""
+    public var client_secret_key: String = ""
     
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         decisionHandler(.allow)
@@ -117,7 +117,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     public override func viewDidAppear(_ animated: Bool) {
         if student == nil { self.dismiss(animated: true, completion: nil) }
         
-        if((client_id?.isEmpty) != nil || ((client_secret_key?.isEmpty) != nil)) {
+        if(client_id.isEmpty || (client_secret_key.isEmpty)) {
             delegate?.gqErrorResponse(error: true, message: "Client ID or Client Secret not provided")
             self.dismiss(animated: true, completion: nil)
         }
@@ -125,7 +125,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
         print("client_id => \(client_id)\nclient_secret_key => \(client_secret_key)")
         let base = "\(client_id):\(client_secret_key)"
         StaticConfig.aBase = base.base64EncodedString
-        StaticConfig.gqAPIKey = gq_api_key ?? ""
+        StaticConfig.gqAPIKey = gq_api_key
         print("StaticConfig.aBase \(StaticConfig.aBase)")
         print("StaticConfig.aBaseCopy \(StaticConfig.aBaseCopy)")
         
@@ -169,15 +169,15 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     public func validation1() -> [String: String] {
         var errorMessage = ""
         
-        if ((client_id?.isEmpty) != nil) {
+        if ((client_id.isEmpty) != nil) {
             errorMessage += "Please enter a valid Client Id\n"
         }
         
-        if ((client_secret_key?.isEmpty) != nil) {
+        if ((client_secret_key.isEmpty) != nil) {
             errorMessage += "Please enter a valid Client secret key\n"
         }
         
-        if ((gq_api_key?.isEmpty) != nil) {
+        if ((gq_api_key.isEmpty) != nil) {
             errorMessage += "Please enter a valid GQ Api Key\n"
         }
         
