@@ -17,6 +17,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     public var delegate: GQPaymentDelegate?
     
     public var client_id: String?
+    public var gq_api_key: String?
     public var client_secret_key: String?
     
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -118,6 +119,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
         
         let base = "\(client_id ?? ""):\(client_secret_key ?? "")"
         StaticConfig.aBase = base.base64EncodedString
+        StaticConfig.gqAPIKey = gq_api_key ?? ""
         print("StaticConfig.aBase \(StaticConfig.aBase)")
         print("StaticConfig.aBaseCopy \(StaticConfig.aBaseCopy)")
     }
@@ -164,6 +166,18 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     public func validation1() -> [String: String] {
         var errorMessage = ""
         
+        if ((client_id?.isEmpty) != nil) {
+            errorMessage += "Please enter a valid Client Id\n"
+        }
+        
+        if ((client_secret_key?.isEmpty) != nil) {
+            errorMessage += "Please enter a valid Client secret key\n"
+        }
+        
+        if ((gq_api_key?.isEmpty) != nil) {
+            errorMessage += "Please enter a valid GQ Api Key\n"
+        }
+        
         if ((student?.studentId?.isEmpty) != nil) {
             errorMessage += "Student ID cannot be null\n"
         }
@@ -203,7 +217,6 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
                 
                 self.elegibity()
             }
-
         }
     }
     
