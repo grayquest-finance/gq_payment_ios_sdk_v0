@@ -112,20 +112,22 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     public override func viewDidLoad() {
         super.viewDidLoad()
 
+    }
+    
+    public override func viewDidAppear(_ animated: Bool) {
+        if student == nil { self.dismiss(animated: true, completion: nil) }
+        
         if((client_id?.isEmpty) != nil || ((client_secret_key?.isEmpty) != nil)) {
             delegate?.gqErrorResponse(error: true, message: "Client ID or Client Secret not provided")
             self.dismiss(animated: true, completion: nil)
         }
         
-        let base = "\(client_id ?? ""):\(client_secret_key ?? "")"
+        let base = "\(client_id):\(client_secret_key)"
         StaticConfig.aBase = base.base64EncodedString
         StaticConfig.gqAPIKey = gq_api_key ?? ""
         print("StaticConfig.aBase \(StaticConfig.aBase)")
         print("StaticConfig.aBaseCopy \(StaticConfig.aBaseCopy)")
-    }
-    
-    public override func viewDidAppear(_ animated: Bool) {
-        if student == nil { self.dismiss(animated: true, completion: nil) }
+        
         let response1 = validation1()
         if (response1["error"] == "false") { customer() }
         else {
