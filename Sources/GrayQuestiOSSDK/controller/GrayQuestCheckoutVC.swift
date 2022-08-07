@@ -169,15 +169,15 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     public func validation1() -> [String: String] {
         var errorMessage = ""
         
-        if ((client_id.isEmpty) != nil) {
+        if (client_id.isEmpty) {
             errorMessage += "Please enter a valid Client Id\n"
         }
         
-        if ((client_secret_key.isEmpty) != nil) {
+        if (client_secret_key.isEmpty) {
             errorMessage += "Please enter a valid Client secret key\n"
         }
         
-        if ((gq_api_key.isEmpty) != nil) {
+        if (gq_api_key.isEmpty) {
             errorMessage += "Please enter a valid GQ Api Key\n"
         }
         
