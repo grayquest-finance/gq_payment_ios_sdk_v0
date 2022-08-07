@@ -122,6 +122,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             self.dismiss(animated: true, completion: nil)
         }
         
+        print("client_id => \(client_id)\nclient_secret_key => \(client_secret_key)")
         let base = "\(client_id):\(client_secret_key)"
         StaticConfig.aBase = base.base64EncodedString
         StaticConfig.gqAPIKey = gq_api_key ?? ""
