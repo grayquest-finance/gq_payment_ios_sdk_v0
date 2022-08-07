@@ -16,6 +16,8 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     var checkout_details: CheckoutDetails?
     public var delegate: GQPaymentDelegate?
     
+    public var client_id: String?
+    public var client_secret_key: String?
     
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         decisionHandler(.allow)
@@ -109,6 +111,15 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     public override func viewDidLoad() {
         super.viewDidLoad()
 
+        if((client_id?.isEmpty) != nil || ((client_secret_key?.isEmpty) != nil)) {
+            delegate?.gqErrorResponse(error: true, message: "Client ID or Client Secret not provided")
+            self.dismiss(animated: true, completion: nil)
+        }
+        
+        let base = "\(client_id ?? ""):\(client_secret_key ?? "")"
+        StaticConfig.aBase = base.base64EncodedString
+        print("StaticConfig.aBase \(StaticConfig.aBase)")
+        print("StaticConfig.aBaseCopy \(StaticConfig.aBaseCopy)")
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -223,5 +234,15 @@ extension WKWebView {
         while !finished {
             RunLoop.current.run(mode: RunLoop.Mode(rawValue: "NSDefaultRunLoopMode"), before: NSDate.distantFuture)
         }
+    }
+}
+
+public extension String{
+    ///base64EncodedString
+    var base64EncodedString:String{
+        if let data = data(using: .utf8){
+            return data.base64EncodedString()
+        }
+        return ""
     }
 }
