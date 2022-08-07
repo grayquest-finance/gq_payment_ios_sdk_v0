@@ -12,7 +12,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     
     var webView: WKWebView!
     
-    public var student: Student?
+    public var student: Student? = nil
     var checkout_details: CheckoutDetails?
     public var delegate: GQPaymentDelegate?
     
