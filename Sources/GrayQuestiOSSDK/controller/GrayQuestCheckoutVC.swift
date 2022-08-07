@@ -181,15 +181,19 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             errorMessage += "Please enter a valid GQ Api Key\n"
         }
         
-        if ((student?.studentId?.isEmpty) != nil) {
+        if student == nil {
+            return ["error": "true", "message": "Student cannot be null"]
+        }
+    
+        if student!.studentId!.isEmpty {
             errorMessage += "Student ID cannot be null\n"
         }
         
-        if ((student?.feeEditable?.isEmpty) != nil) {
+        if student!.feeEditable!.isEmpty {
             errorMessage += "Fee Editable value not set\n"
         }
         
-        if ((student?.env?.isEmpty) != nil) {
+        if student!.env!.isEmpty {
             errorMessage += ""
         }
         
