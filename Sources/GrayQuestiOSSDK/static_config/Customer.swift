@@ -12,6 +12,9 @@ import WebKit
 public class Customer {
     
     public func makeCustomerRequest(mobile: String, completion: @escaping([String: Any]?, Error?) -> Void) {
+        
+        print("StaticConfig.createCustomerUrl", StaticConfig.createCustomerUrl)
+        print("customer_mobile", "\(mobile)")
         let url = URL(string: StaticConfig.createCustomerUrl)!
         var request = URLRequest(url: url)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
