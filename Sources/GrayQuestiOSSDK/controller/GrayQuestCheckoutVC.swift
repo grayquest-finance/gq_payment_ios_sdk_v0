@@ -143,6 +143,8 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             print("Auth is empty")
             return
         }
+        print("config", config)
+        print("prefill", prefill)
         
         let response1 = validation1(config: config!, prefill: prefill!, auth: auth)
         if (response1["error"] == "false") { customer() }
