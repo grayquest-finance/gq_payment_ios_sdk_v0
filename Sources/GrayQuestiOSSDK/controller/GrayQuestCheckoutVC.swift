@@ -12,13 +12,13 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     
     var webView: WKWebView!
     
-    public var student: Student? = nil
     var checkout_details: CheckoutDetails?
     public var delegate: GQPaymentDelegate?
     
-    public var client_id: String = ""
-    public var gq_api_key: String = ""
-    public var client_secret_key: String = ""
+    public var config: [String: Any]?
+    public var prefill: [String: Any]?
+    
+    private var mobileNumber: String?
     
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         decisionHandler(.allow)
@@ -115,21 +115,36 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     }
     
     public override func viewDidAppear(_ animated: Bool) {
-        if student == nil { self.dismiss(animated: true, completion: nil) }
+//        if student == nil { self.dismiss(animated: true, completion: nil) }
+//
+//        if(client_id.isEmpty || (client_secret_key.isEmpty)) {
+//            delegate?.gqErrorResponse(error: true, message: "Client ID or Client Secret not provided")
+//            self.dismiss(animated: true, completion: nil)
+//        }
+//
+//        print("client_id => \(client_id)\nclient_secret_key => \(client_secret_key)")
+//        let base = "\(client_id):\(client_secret_key)"
+//        StaticConfig.aBase = base.base64EncodedString
+//        StaticConfig.gqAPIKey = gq_api_key
+//        print("StaticConfig.aBase \(StaticConfig.aBase)")
+//        print("StaticConfig.aBaseCopy \(StaticConfig.aBaseCopy)")
         
-        if(client_id.isEmpty || (client_secret_key.isEmpty)) {
-            delegate?.gqErrorResponse(error: true, message: "Client ID or Client Secret not provided")
-            self.dismiss(animated: true, completion: nil)
+        guard let config = config else {
+            print("Config is empty")
+            return
         }
         
-        print("client_id => \(client_id)\nclient_secret_key => \(client_secret_key)")
-        let base = "\(client_id):\(client_secret_key)"
-        StaticConfig.aBase = base.base64EncodedString
-        StaticConfig.gqAPIKey = gq_api_key
-        print("StaticConfig.aBase \(StaticConfig.aBase)")
-        print("StaticConfig.aBaseCopy \(StaticConfig.aBaseCopy)")
+        guard let prefill = prefill else {
+            print("Prefill is empty")
+            return
+        }
         
-        let response1 = validation1()
+        guard let auth = config["auth"] as? [String : String] else {
+            print("Auth is empty")
+            return
+        }
+        
+        let response1 = validation1(config: config, prefill: prefill, auth: auth)
         if (response1["error"] == "false") { customer() }
         else {
             print("Error Validation 1 -> \(response1["message"] ?? "ViewDidLoad Error")")
@@ -166,46 +181,43 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
         }
     }
     
-    public func validation1() -> [String: String] {
+    public func validation1(config: [String: Any], prefill: [String: Any], auth: [String: String]) -> [String: String] {
         var errorMessage = ""
         
-        if (client_id.isEmpty) {
+        if (auth["client_id"] == nil) {
             errorMessage += "Please enter a valid Client Id\n"
         }
         
-        if (client_secret_key.isEmpty) {
+        if (auth["client_secret_key"] == nil) {
             errorMessage += "Please enter a valid Client secret key\n"
         }
         
-        if (gq_api_key.isEmpty) {
+        if (auth["gq_api_key"] == nil) {
             errorMessage += "Please enter a valid GQ Api Key\n"
         }
         
-        if student == nil {
-            return ["error": "true", "message": "Student cannot be null"]
-        }
-    
-        if student!.studentId!.isEmpty {
+        if (auth["student_id"] == nil) {
             errorMessage += "Student ID cannot be null\n"
         }
         
-        if student!.feeEditable!.isEmpty {
-            errorMessage += "Fee Editable value not set\n"
-        }
-        
-        if student!.env!.isEmpty {
-            errorMessage += ""
+        if (auth["customer_number"] == nil) {
+            errorMessage += "Customer number cannot be null\n"
         }
         
         if (errorMessage != "") {
             return ["error": "true", "message": errorMessage]
         }
         
+        mobileNumber = auth["customer_number"]
         return ["error": "false", "message": "Validation Successful"]
     }
     
     public func customer() {
-        Customer().makeCustomerRequest(mobile: "9988779988") { responseObject, error in
+        guard mobileNumber != nil else {
+            print("Mobile Number cannot be empty!")
+            return
+        }
+        Customer().makeCustomerRequest(mobile: "\(mobileNumber!)") { responseObject, error in
             guard let responseObject = responseObject, error == nil else {
                 print(error ?? "Unknown error")
                 return
@@ -214,13 +226,13 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             DispatchQueue.main.async {
                 let message = responseObject["message"] as! String
                 
-                if (message == "Customer Exists") { self.student?.userType = "existing" }
-                else { self.student?.userType = "new" }
+                if (message == "Customer Exists") { self.config?["userType"] = "existing" }
+                else { self.config?["userType"] = "new" }
                 
                 let data = responseObject["data"] as! [String:AnyObject]
-                self.student?.customerCode = (data["customer_code"] as! String)
-                self.student?.customerMobile = (data["customer_mobile"] as! String)
-                self.student?.customerId = "\(data["customer_id"] as! Int)"
+                self.config?["customerCode"] = (data["customer_code"] as! String)
+                self.config?["customerMobile"] = (data["customer_mobile"] as! String)
+                self.config?["customerId"] = data["customer_id"] as! Int
                 
                 self.elegibity()
             }
@@ -228,7 +240,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     }
     
     public func elegibity() {
-        let urlStr = "\(StaticConfig.checkElegibility)?gapik=\(StaticConfig.gqAPIKey)&abase=\(StaticConfig.aBase)&sid=\(student?.studentId! ?? "")&m=\(student?.customerMobile! ?? "")&famt=\(student?.feeAmount! ?? "")&pamt=\(student?.payableAmount! ?? "")&env=\(student?.env! ?? "")&fedit=\(student?.feeEditable! ?? "")&cid=\(student?.customerId! ?? "")&ccode=\(student?.customerCode! ?? "")&pc=&s=asdk&user=\(student?.userType! ?? "")"
+        let urlStr = "\(StaticConfig.checkElegibility)?gapik=\(StaticConfig.gqAPIKey)&abase=\(StaticConfig.aBase)&sid=\(self.config?["studentId"] as! String)&m=\(self.mobileNumber!)&famt=\(self.config?["feeAmount"]! ?? "")&pamt=\(self.config?["payableAmount"]! ?? "")&env=\(self.config?["env"]! ?? "")&fedit=\(self.config?["feeEditable"]! ?? "")&cid=\(self.config?["customerId"]! ?? "")&ccode=\(self.config?["customerCode"]! ?? "")&pc=&s=asdk&user=\(self.config?["userType"]! ?? "")"
         print("urlStr -> \(urlStr)")
         let url = URL(string: urlStr)
         let request = URLRequest(url: url!)
