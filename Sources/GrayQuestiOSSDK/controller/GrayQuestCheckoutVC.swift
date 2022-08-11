@@ -244,7 +244,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     
     public func elegibity() {
         print("self.config", self.config)
-        let urlStr = "\(StaticConfig.checkElegibility)?gapik=\(StaticConfig.gqAPIKey)&abase=\(StaticConfig.aBase)&sid=\(self.config?["studentId"] as! String)&m=\(self.mobileNumber!)&famt=\(self.config?["feeAmount"] ?? "0")&pamt=\(self.config?["payableAmount"] ?? "0" )&env=\(self.config?["env"]! )&fedit=\(self.config?["feeEditable"]! )&cid=\(self.config?["customerId"]! )&ccode=\(self.config?["customerCode"]!)&pc=&s=asdk&user=\(self.config?["userType"]! )"
+        let urlStr = "\(StaticConfig.checkElegibility)?gapik=\(StaticConfig.gqAPIKey)&abase=\(StaticConfig.aBase)&sid=\(self.config?["student_id"] as! String)&m=\(self.mobileNumber!)&famt=\(self.config?["fee_amount"] ?? "0")&pamt=\(self.config?["payable_amount"] ?? "0" )&env=\(self.config?["env"]! )&fedit=\(self.config?["fee_editable"]! )&cid=\(self.config?["customerId"]! )&ccode=\(self.config?["customerCode"]!)&pc=&s=asdk&user=\(self.config?["userType"]! )"
         print("urlStr -> \(urlStr)")
         let url = URL(string: urlStr)
         let request = URLRequest(url: url!)
