@@ -141,9 +141,9 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
         print("config", config)
         print("prefill", prefill)
         
-        let base = "\(client_id):\(client_secret_key)"
+        let base = "\(auth["client_id"] ?? ""):\(auth["client_secret_key"] ?? "")"
         StaticConfig.aBase = base.base64EncodedString
-        StaticConfig.gqAPIKey = gq_api_key
+        StaticConfig.gqAPIKey = auth["gq_api_key"]!
         print("StaticConfig.aBase \(StaticConfig.aBase)")
         print("StaticConfig.aBaseCopy \(StaticConfig.aBaseCopy)")
         
