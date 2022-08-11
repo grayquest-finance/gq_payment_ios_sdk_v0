@@ -123,11 +123,6 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
 //        }
 //
 //        print("client_id => \(client_id)\nclient_secret_key => \(client_secret_key)")
-//        let base = "\(client_id):\(client_secret_key)"
-//        StaticConfig.aBase = base.base64EncodedString
-//        StaticConfig.gqAPIKey = gq_api_key
-//        print("StaticConfig.aBase \(StaticConfig.aBase)")
-//        print("StaticConfig.aBaseCopy \(StaticConfig.aBaseCopy)")
         
         guard (config != nil) else {
             print("Config is empty")
@@ -145,6 +140,12 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
         }
         print("config", config)
         print("prefill", prefill)
+        
+        let base = "\(client_id):\(client_secret_key)"
+        StaticConfig.aBase = base.base64EncodedString
+        StaticConfig.gqAPIKey = gq_api_key
+        print("StaticConfig.aBase \(StaticConfig.aBase)")
+        print("StaticConfig.aBaseCopy \(StaticConfig.aBaseCopy)")
         
         let response1 = validation1(config: config!, prefill: prefill!, auth: auth)
         if (response1["error"] == "false") { customer() }
@@ -210,7 +211,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             return ["error": "true", "message": errorMessage]
         }
         
-        mobileNumber = config["customer_number"] as! String
+        mobileNumber = config["customer_number"] as? String
         return ["error": "false", "message": "Validation Successful"]
     }
     
