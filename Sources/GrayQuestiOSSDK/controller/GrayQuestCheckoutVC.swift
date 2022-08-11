@@ -210,7 +210,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             return ["error": "true", "message": errorMessage]
         }
         
-        mobileNumber = auth["customer_number"]
+        mobileNumber = config["customer_number"] as! String
         return ["error": "false", "message": "Validation Successful"]
     }
     
