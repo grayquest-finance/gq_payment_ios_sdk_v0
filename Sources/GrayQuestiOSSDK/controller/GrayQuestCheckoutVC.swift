@@ -196,11 +196,11 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             errorMessage += "Please enter a valid GQ Api Key\n"
         }
         
-        if (auth["student_id"] == nil) {
+        if (config["student_id"] == nil) {
             errorMessage += "Student ID cannot be null\n"
         }
         
-        if (auth["customer_number"] == nil) {
+        if (config["customer_number"] == nil) {
             errorMessage += "Customer number cannot be null\n"
         }
         
