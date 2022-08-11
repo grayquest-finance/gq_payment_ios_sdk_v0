@@ -139,6 +139,8 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             return
         }
         
+        print("config", config)
+        print("prefill", prefill)
         guard let auth = config["auth"] as? [String : String] else {
             print("Auth is empty")
             return
