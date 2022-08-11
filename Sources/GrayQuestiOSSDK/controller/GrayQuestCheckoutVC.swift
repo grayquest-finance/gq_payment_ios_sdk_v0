@@ -243,6 +243,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     }
     
     public func elegibity() {
+        print("self.config", self.config)
         let urlStr = "\(StaticConfig.checkElegibility)?gapik=\(StaticConfig.gqAPIKey)&abase=\(StaticConfig.aBase)&sid=\(self.config?["studentId"] as! String)&m=\(self.mobileNumber!)&famt=\(self.config?["feeAmount"] ?? "0")&pamt=\(self.config?["payableAmount"] ?? "0" )&env=\(self.config?["env"]! )&fedit=\(self.config?["feeEditable"]! )&cid=\(self.config?["customerId"]! )&ccode=\(self.config?["customerCode"]!)&pc=&s=asdk&user=\(self.config?["userType"]! )"
         print("urlStr -> \(urlStr)")
         let url = URL(string: urlStr)
