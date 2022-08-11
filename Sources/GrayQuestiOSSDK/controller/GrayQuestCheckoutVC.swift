@@ -15,8 +15,8 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     var checkout_details: CheckoutDetails?
     public var delegate: GQPaymentDelegate?
     
-    public var config: [String: Any]?
-    public var prefill: [String: Any]?
+    public var config: [String: Any] = [:]
+    public var prefill: [String: Any] = [:]
     
     private var mobileNumber: String?
     
@@ -129,12 +129,12 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
 //        print("StaticConfig.aBase \(StaticConfig.aBase)")
 //        print("StaticConfig.aBaseCopy \(StaticConfig.aBaseCopy)")
         
-        guard let config = config else {
+        guard config.isEmpty else {
             print("Config is empty")
             return
         }
         
-        guard let prefill = prefill else {
+        guard prefill.isEmpty else {
             print("Prefill is empty")
             return
         }
@@ -226,13 +226,13 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             DispatchQueue.main.async {
                 let message = responseObject["message"] as! String
                 
-                if (message == "Customer Exists") { self.config?["userType"] = "existing" }
-                else { self.config?["userType"] = "new" }
+                if (message == "Customer Exists") { self.config["userType"] = "existing" }
+                else { self.config["userType"] = "new" }
                 
                 let data = responseObject["data"] as! [String:AnyObject]
-                self.config?["customerCode"] = (data["customer_code"] as! String)
-                self.config?["customerMobile"] = (data["customer_mobile"] as! String)
-                self.config?["customerId"] = data["customer_id"] as! Int
+                self.config["customerCode"] = (data["customer_code"] as! String)
+                self.config["customerMobile"] = (data["customer_mobile"] as! String)
+                self.config["customerId"] = data["customer_id"] as! Int
                 
                 self.elegibity()
             }
@@ -240,7 +240,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     }
     
     public func elegibity() {
-        let urlStr = "\(StaticConfig.checkElegibility)?gapik=\(StaticConfig.gqAPIKey)&abase=\(StaticConfig.aBase)&sid=\(self.config?["studentId"] as! String)&m=\(self.mobileNumber!)&famt=\(self.config?["feeAmount"]! ?? "")&pamt=\(self.config?["payableAmount"]! ?? "")&env=\(self.config?["env"]! ?? "")&fedit=\(self.config?["feeEditable"]! ?? "")&cid=\(self.config?["customerId"]! ?? "")&ccode=\(self.config?["customerCode"]! ?? "")&pc=&s=asdk&user=\(self.config?["userType"]! ?? "")"
+        let urlStr = "\(StaticConfig.checkElegibility)?gapik=\(StaticConfig.gqAPIKey)&abase=\(StaticConfig.aBase)&sid=\(self.config["studentId"] as! String)&m=\(self.mobileNumber!)&famt=\(self.config["feeAmount"] ?? "0")&pamt=\(self.config["payableAmount"] ?? "0" )&env=\(self.config["env"]! )&fedit=\(self.config["feeEditable"]! )&cid=\(self.config["customerId"]! )&ccode=\(self.config["customerCode"]!)&pc=&s=asdk&user=\(self.config["userType"]! )"
         print("urlStr -> \(urlStr)")
         let url = URL(string: urlStr)
         let request = URLRequest(url: url!)
