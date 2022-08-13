@@ -87,6 +87,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             
             checkout_details = CheckoutDetails(order_id: order_id as? String ?? "", razorpay_key: (razorpay_key as! String), recurring: recurring_flag ?? true, notes: (notes as? [String : Any] ?? ["nil": "nil"]), customer_id: (customer_id as! String), callback_url: (callback_url as! String))
             
+            print("checkout_details1", checkout_details)
             let newViewController = CheckoutViewController()
             newViewController.checkout_details = checkout_details
             newViewController.delegate = self
