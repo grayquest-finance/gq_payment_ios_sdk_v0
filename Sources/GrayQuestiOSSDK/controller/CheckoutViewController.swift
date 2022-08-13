@@ -18,6 +18,7 @@ public class CheckoutViewController: UIViewController, RazorpayPaymentCompletion
     public override func viewDidLoad() {
         super.viewDidLoad()
         
+        print("checkout_details", checkout_details)
         if (checkout_details?.razorpay_key == nil) {
             return
         }
