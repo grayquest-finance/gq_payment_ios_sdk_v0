@@ -115,15 +115,6 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     }
     
     public override func viewDidAppear(_ animated: Bool) {
-//        if student == nil { self.dismiss(animated: true, completion: nil) }
-//
-//        if(client_id.isEmpty || (client_secret_key.isEmpty)) {
-//            delegate?.gqErrorResponse(error: true, message: "Client ID or Client Secret not provided")
-//            self.dismiss(animated: true, completion: nil)
-//        }
-//
-//        print("client_id => \(client_id)\nclient_secret_key => \(client_secret_key)")
-        
         guard (config != nil) else {
             print("Config is empty")
             return
@@ -138,8 +129,6 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             print("Auth is empty")
             return
         }
-        print("config", config)
-        print("prefill", prefill)
         
         let base = "\(auth["client_id"] ?? ""):\(auth["client_secret_key"] ?? "")"
         StaticConfig.aBase = base.base64EncodedString
@@ -242,7 +231,21 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
         }
     }
     
+    func getOptionalData() -> String {
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: prefill!, options: .prettyPrinted)
+            let convertedString = String(data: jsonData, encoding: String.Encoding.utf8) // the data will be converted to the string
+            print(convertedString ?? "defaultvalue")
+            return convertedString ?? "defaultvalue"
+        } catch {
+            print("Something went wrong while getting optional data \(error)")
+            return ""
+        }
+    }
+    
     public func elegibity() {
+        let optionalData = getOptionalData()
+        
         let urlStr = "\(StaticConfig.checkElegibility)?gapik=\(StaticConfig.gqAPIKey)&abase=\(StaticConfig.aBase)&sid=\(self.config?["student_id"] as! String)&m=\(self.mobileNumber!)&famt=\(self.config?["fee_amount"] ?? "0")&pamt=\(self.config?["payable_amount"] ?? "0" )&env=\(self.config?["env"] as! String )&fedit=\(self.config?["fee_editable"] as! String)&cid=\(self.config?["customerId"] as! Int)&ccode=\(self.config?["customerCode"] as! String)&pc=&s=asdk&user=\(self.config?["userType"] as! String)"
         print("urlStr -> \(urlStr)")
         let url = URL(string: urlStr)
