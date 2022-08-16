@@ -244,7 +244,8 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     }
     
     public func elegibity() {
-        let optionalData = getOptionalData()
+        let optionalData = getOptionalData().addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+        print(optionalData!)
         
         let urlStr = "\(StaticConfig.checkElegibility)?gapik=\(StaticConfig.gqAPIKey)&abase=\(StaticConfig.aBase)&sid=\(self.config?["student_id"] as! String)&m=\(self.mobileNumber!)&famt=\(self.config?["fee_amount"] ?? "0")&pamt=\(self.config?["payable_amount"] ?? "0" )&env=\(self.config?["env"] as! String )&fedit=\(self.config?["fee_editable"] as! String)&cid=\(self.config?["customerId"] as! Int)&ccode=\(self.config?["customerCode"] as! String)&pc=&s=asdk&user=\(self.config?["userType"] as! String)"
         print("urlStr -> \(urlStr)\(optionalData)")
