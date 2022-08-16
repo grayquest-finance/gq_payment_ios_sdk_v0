@@ -47,7 +47,6 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
 
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if (message.name == "sdkSuccess") {
-            print("sdkSuccess - \(message.body) \(type(of: message.body))")
             do {
                 let data = message.body as! String
                 let con = try JSONSerialization.jsonObject(with: data.data(using: .utf8)!, options: []) as! [String: Any]
@@ -58,21 +57,17 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
                 self.dismiss(animated: true, completion: nil)
             }
         } else if (message.name == "sdkError") {
-            print("sdkError - \(message.body)")
             do {
                 let data = message.body as! String
                 let con = try JSONSerialization.jsonObject(with: data.data(using: .utf8)!, options: []) as! [String: Any]
                 delegate?.gqFailureResponse(data: con)
             } catch {
-                print(error)
                 delegate?.gqErrorResponse(error: true, message: error.localizedDescription)
                 self.dismiss(animated: true, completion: nil)
             }
         } else if (message.name == "sdkCancel") {
-            print("sdkCancel - \(message.body)")
             self.dismiss(animated: true, completion: nil)
         } else if (message.name == "sendADOptions") {
-            print("sendADOptions - \(message.body)")
             let ad_data = convertStringToDictionary(text: message.body as! String)
             let razorpay_key = ad_data!["key"]
             let order_id = ad_data!["order_id"]
@@ -133,8 +128,6 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
         let base = "\(auth["client_id"] ?? ""):\(auth["client_secret_key"] ?? "")"
         StaticConfig.aBase = base.base64EncodedString
         StaticConfig.gqAPIKey = auth["gq_api_key"]!
-        print("StaticConfig.aBase \(StaticConfig.aBase)")
-        print("StaticConfig.aBaseCopy \(StaticConfig.aBaseCopy)")
         
         let response1 = validation1(config: config!, prefill: prefill!, auth: auth)
         if (response1["error"] == "false") { customer() }
@@ -235,7 +228,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: prefill!, options: [])
             let convertedString = String(data: jsonData, encoding: String.Encoding.utf8) // the data will be converted to the string
-            print(convertedString ?? "defaultvalue")
+
             return convertedString ?? "defaultvalue"
         } catch {
             print("Something went wrong while getting optional data \(error)")
@@ -247,7 +240,6 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
         let optionalData = getOptionalData().addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
         
         let urlStr = "\(StaticConfig.checkElegibility)?gapik=\(StaticConfig.gqAPIKey)&abase=\(StaticConfig.aBase)&sid=\(self.config?["student_id"] as! String)&m=\(self.mobileNumber!)&famt=\(self.config?["fee_amount"] ?? "0")&pamt=\(self.config?["payable_amount"] ?? "0" )&env=\(self.config?["env"] as! String )&fedit=\(self.config?["fee_editable"] as! String)&cid=\(self.config?["customerId"] as! Int)&ccode=\(self.config?["customerCode"] as! String)&pc=&s=asdk&user=\(self.config?["userType"] as! String)&optional=\(optionalData!)"
-        print("urlStr -> \(urlStr)\(optionalData)")
         let url = URL(string: urlStr)
         let request = URLRequest(url: url!)
         webView.load(request)

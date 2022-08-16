@@ -1,6 +1,6 @@
 //
 //  GrayQuestPaymentVC.swift
-//  
+//  Handles the webview loading part, once an user clicks on view payment button
 //
 //  Created by admin on 02/08/22.
 //
@@ -27,7 +27,6 @@ class GrayQuestPaymentVC: UIViewController, WKUIDelegate, WKScriptMessageHandler
     
     override func loadView() {
         if (paymentURL == nil) {return}
-        print("URL LOGPAYMENT \(paymentURL)")
         let wkPreferences = WKPreferences()
         wkPreferences.javaScriptCanOpenWindowsAutomatically = true
         
@@ -47,8 +46,6 @@ class GrayQuestPaymentVC: UIViewController, WKUIDelegate, WKScriptMessageHandler
     }
     
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Swift.Void) {
-        print("navigationAction.request.url -> \(navigationAction.request.url)")
-        
         var redirectURL = "\(navigationAction.request.url)"
         
         if (redirectURL.contains("cf_token")) {

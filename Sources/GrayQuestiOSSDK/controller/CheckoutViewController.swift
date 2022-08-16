@@ -1,6 +1,6 @@
 //
 //  CheckoutViewController.swift
-//  
+//  Handles ADOptions (Razorpay part of the application)
 //
 //  Created by admin on 02/08/22.
 //
