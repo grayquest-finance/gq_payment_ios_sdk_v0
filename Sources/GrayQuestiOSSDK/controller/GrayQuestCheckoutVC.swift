@@ -164,6 +164,9 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     public func validation1(config: [String: Any], auth: [String: String]) -> [String: String] {
         var errorMessage = ""
         
+        print("config \(config)")
+        print("auth \(auth)")
+        
         if (auth["client_id"] == nil || !(auth["client_id"] ?? "").isEmpty) {
             errorMessage += "Please enter a valid Client Id\n"
         }
