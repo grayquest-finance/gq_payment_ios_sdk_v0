@@ -198,12 +198,6 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             return
         }
         Customer().makeCustomerRequest(mobile: "\(mobileNumber!)") { responseObject, error in
-            
-            if (responseObject == nil && error == nil) {
-                self.delegate?.gqErrorResponse(error: true, message: "You are unauthorized to access the SDK, please check your GQKey, and GQSecret")
-                self.dismiss(animated: true, completion: nil)
-            }
-            
             guard let responseObject = responseObject, error == nil else {
                 print(error ?? "Unknown error")
                 self.delegate?.gqErrorResponse(error: true, message: "You are unauthorized to access the SDK, please check your GQKey, and GQSecret")
