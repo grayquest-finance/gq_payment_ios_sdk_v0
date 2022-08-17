@@ -115,11 +115,6 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             return
         }
         
-        guard (prefill != nil) else {
-            print("Prefill is empty")
-            return
-        }
-        
         guard let auth = config!["auth"] as? [String : String] else {
             print("Auth is empty")
             return
@@ -129,10 +124,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
         StaticConfig.aBase = base.base64EncodedString
         StaticConfig.gqAPIKey = auth["gq_api_key"]!
         
-        print("aBase \(StaticConfig.aBase)")
-        print("gqAPIKey \(StaticConfig.gqAPIKey)")
-        
-        let response1 = validation1(config: config!, prefill: prefill!, auth: auth)
+        let response1 = validation1(config: config!, auth: auth)
         if (response1["error"] == "false") { customer() }
         else {
             print("Error Validation 1 -> \(response1["message"] ?? "ViewDidLoad Error")")
@@ -169,7 +161,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
         }
     }
     
-    public func validation1(config: [String: Any], prefill: [String: Any], auth: [String: String]) -> [String: String] {
+    public func validation1(config: [String: Any], auth: [String: String]) -> [String: String] {
         var errorMessage = ""
         
         if (auth["client_id"] == nil) {
@@ -208,6 +200,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
         Customer().makeCustomerRequest(mobile: "\(mobileNumber!)") { responseObject, error in
             guard let responseObject = responseObject, error == nil else {
                 print(error ?? "Unknown error")
+                self.delegate?.gqErrorResponse(error: true, message: "You are unauthorized to access the SDK, please check your GQKey, and GQSecret")
                 return
             }
             
@@ -228,11 +221,15 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     }
     
     func getOptionalData() -> String {
+        if prefill == nil {
+            return ""
+        }
+        
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: prefill!, options: [])
             let convertedString = String(data: jsonData, encoding: String.Encoding.utf8) // the data will be converted to the string
 
-            return convertedString ?? "defaultvalue"
+            return convertedString ?? ""
         } catch {
             print("Something went wrong while getting optional data \(error)")
             return ""

@@ -43,10 +43,7 @@ public class Customer {
                 return
             }
             
-            // do whatever you want with the `data`, e.g.:
-            
             do {
-//                let json = try JSONSerialization.jsonObject(with: data, options: [])
                 let responseObject = (try JSONSerialization.jsonObject(with: data)) as? [String: Any]
                 return completion(responseObject, nil)
             } catch {
