@@ -164,23 +164,23 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
     public func validation1(config: [String: Any], auth: [String: String]) -> [String: String] {
         var errorMessage = ""
         
-        if (auth["client_id"] == nil) {
+        if (auth["client_id"] == nil || !auth["client_id"]?.isEmpty) {
             errorMessage += "Please enter a valid Client Id\n"
         }
         
-        if (auth["client_secret_key"] == nil) {
+        if (auth["client_secret_key"] == nil || !auth["client_id"]?.isEmpty) {
             errorMessage += "Please enter a valid Client secret key\n"
         }
         
-        if (auth["gq_api_key"] == nil) {
+        if (auth["gq_api_key"] == nil || !auth["client_id"]?.isEmpty) {
             errorMessage += "Please enter a valid GQ Api Key\n"
         }
         
-        if (config["student_id"] == nil) {
+        if (config["student_id"] == nil || !auth["client_id"]?.isEmpty) {
             errorMessage += "Student ID cannot be null\n"
         }
         
-        if (config["customer_number"] == nil) {
+        if (config["customer_number"] == nil || !auth["client_id"]?.isEmpty) {
             errorMessage += "Customer number cannot be null\n"
         }
         
@@ -240,6 +240,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
         let optionalData = getOptionalData().addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
         
         let urlStr = "\(StaticConfig.checkElegibility)?gapik=\(StaticConfig.gqAPIKey)&abase=\(StaticConfig.aBase)&sid=\(self.config?["student_id"] as! String)&m=\(self.mobileNumber!)&famt=\(self.config?["fee_amount"] ?? "0")&pamt=\(self.config?["payable_amount"] ?? "0" )&env=\(self.config?["env"] as! String )&fedit=\(self.config?["fee_editable"] as! String)&cid=\(self.config?["customerId"] as! Int)&ccode=\(self.config?["customerCode"] as! String)&pc=&s=asdk&user=\(self.config?["userType"] as! String)&optional=\(optionalData!)"
+        print(urlStr)
         let url = URL(string: urlStr)
         let request = URLRequest(url: url!)
         webView.load(request)
