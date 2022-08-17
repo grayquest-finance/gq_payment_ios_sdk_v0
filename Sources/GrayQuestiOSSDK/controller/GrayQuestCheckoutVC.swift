@@ -202,6 +202,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
                 print(error ?? "Unknown error")
                 self.delegate?.gqErrorResponse(error: true, message: "You are unauthorized to access the SDK, please check your GQKey, and GQSecret")
                 self.dismiss(animated: true, completion: nil)
+                return
             }
             
             DispatchQueue.main.async {
