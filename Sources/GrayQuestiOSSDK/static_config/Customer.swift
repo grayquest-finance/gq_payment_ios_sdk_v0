@@ -40,7 +40,7 @@ public class Customer {
             guard (200 ... 299) ~= response.statusCode else {                    // check for http errors
                 print("statusCode should be 2xx, but is \(response.statusCode)")
                 print("response = \(response)")
-                return
+                return completion(nil, nil)
             }
             
             do {
