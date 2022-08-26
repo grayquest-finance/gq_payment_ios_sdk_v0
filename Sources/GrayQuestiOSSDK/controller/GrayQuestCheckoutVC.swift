@@ -168,19 +168,19 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             errorMessage += "Please enter a valid Client Id\n"
         }
         
-        if (auth["client_secret_key"] == nil || (auth["client_id"] ?? "").isEmpty) {
+        if (auth["client_secret_key"] == nil || (auth["client_secret_key"] ?? "").isEmpty) {
             errorMessage += "Please enter a valid Client secret key\n"
         }
         
-        if (auth["gq_api_key"] == nil || (auth["client_id"] ?? "").isEmpty) {
+        if (auth["gq_api_key"] == nil || (auth["gq_api_key"] ?? "").isEmpty) {
             errorMessage += "Please enter a valid GQ Api Key\n"
         }
         
-        if (config["student_id"] == nil || (auth["client_id"] ?? "").isEmpty) {
+        if (config["student_id"] == nil || (auth["student_id"] ?? "").isEmpty) {
             errorMessage += "Student ID cannot be null\n"
         }
         
-        if (config["customer_number"] == nil || (auth["client_id"] ?? "").isEmpty) {
+        if (config["customer_number"] == nil || (auth["customer_number"] ?? "").isEmpty) {
             errorMessage += "Customer number cannot be null\n"
         }
         
