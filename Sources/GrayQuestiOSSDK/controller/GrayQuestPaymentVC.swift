@@ -34,7 +34,7 @@ class GrayQuestPaymentVC: UIViewController, WKUIDelegate, WKScriptMessageHandler
         webConfiguration.preferences = wkPreferences
         webConfiguration.userContentController.add(self, name: "Gqsdk")
         
-        webView = WKWebView(frame: .zero, configuration: webConfiguration)
+        webView = WKWebView(frame: CGRect(x: 0, y: 0,width: view.frame.width, height: view.frame.height), configuration: webConfiguration)
         webView.configuration.preferences.javaScriptEnabled = true
         webView.navigationDelegate = self
         webView.uiDelegate = self
