@@ -125,6 +125,8 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
         StaticConfig.aBase = base.base64EncodedString
         StaticConfig.gqAPIKey = auth["gq_api_key"]!
         
+        print("StudentID:\(config!["student_id"] ?? "No Student ID")")
+        
         let response1 = validation1(config: config!, auth: auth)
         if (response1["error"] == "false") { customer() }
         else {
