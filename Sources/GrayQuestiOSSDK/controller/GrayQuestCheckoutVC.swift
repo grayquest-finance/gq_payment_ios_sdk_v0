@@ -29,6 +29,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
         let newViewController = GrayQuestPaymentVC()
         newViewController.paymentURL = urlAsString
         self.present(newViewController, animated: true, completion: nil)
+        print("Check")
      }
 
     func convertStringToDictionary(text: String) -> [String:AnyObject]? {
