@@ -25,6 +25,7 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
         guard let urlAsString = navigationAction.request.url?.absoluteString.lowercased() else {
             return
         }
+        print("Change URL: \(urlAsString)")
         if (!urlAsString.contains("cashfree.com")) {return}
         let newViewController = GrayQuestPaymentVC()
         newViewController.paymentURL = urlAsString
