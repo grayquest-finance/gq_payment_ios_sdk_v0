@@ -25,10 +25,12 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
         guard let urlAsString = navigationAction.request.url?.absoluteString.lowercased() else {
             return
         }
+        print("Change URL: \(urlAsString)")
         if (!urlAsString.contains("cashfree.com")) {return}
         let newViewController = GrayQuestPaymentVC()
         newViewController.paymentURL = urlAsString
         self.present(newViewController, animated: true, completion: nil)
+        print("Check")
      }
 
     func convertStringToDictionary(text: String) -> [String:AnyObject]? {
@@ -124,6 +126,8 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
         StaticConfig.aBase = base.base64EncodedString
         StaticConfig.gqAPIKey = auth["gq_api_key"]!
         
+        print("StudentID:\(config!["student_id"] ?? "No Student ID")")
+        
         let response1 = validation1(config: config!, auth: auth)
         if (response1["error"] == "false") { customer() }
         else {
@@ -176,11 +180,11 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             errorMessage += "Please enter a valid GQ Api Key\n"
         }
         
-        if (config["student_id"] == nil || (auth["student_id"] ?? "").isEmpty) {
+        if (config["student_id"] == nil) {
             errorMessage += "Student ID cannot be null\n"
         }
         
-        if (config["customer_number"] == nil || (auth["customer_number"] ?? "").isEmpty) {
+        if (config["customer_number"] == nil) {
             errorMessage += "Customer number cannot be null\n"
         }
         
