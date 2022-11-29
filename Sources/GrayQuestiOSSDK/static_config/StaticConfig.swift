@@ -10,7 +10,7 @@ import Foundation
 
 public struct StaticConfig {
     static var devBaseUrl = "https://erp-api.graydev.tech/"
-    static var prodBaseUrl = "https://erp-api.graydev.com/"
+    static var prodBaseUrl = "https://erp-api.grayquest.com/"
 //    static var baseUrl = devBaseUrl
     static var baseUrl = prodBaseUrl
     static var gqAPIKey = ""
