@@ -18,6 +18,6 @@ public struct StaticConfig {
     static var gqAPIKeyCopy = "9db4fc333d8bcf7fee98804105d9fc0c85199d77"
     static var aBaseCopy = "MzU0NTk4ZmQtNTc1YS00YzFmLWE2ZTMtZTA4ZmM1ZWEwNmQzOjJlYjM0OTczMjU5NGZlNzc3YmUwNzlmYjNjN2U1NTcxOTRmNTVhMTQ="
     static var createCustomerUrl = baseUrl + "v1/customer/create-customer"
-    static var checkElegibility = "https://erp-sdk-old.graydev.tech/instant-eligibility/"
+    static var checkElegibility = "https://erp-sdk-beta.graydev.tech/instant-eligibility/"
 //    static var checkElegibility = "https://erp-sdk-old.grayquest.com/instant-eligibility/"
 }
