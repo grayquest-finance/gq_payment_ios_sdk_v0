@@ -8,11 +8,13 @@
 import UIKit
 import WebKit
 
-public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessageHandler, WKNavigationDelegate, CheckoutControllerDelegate {
+public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessageHandler, WKNavigationDelegate,
+                                    CheckoutControllerDelegate, CashControllerDelegate {
     
     var webView: WKWebView!
     
     var checkout_details: CheckoutDetails?
+    var cash_details: CashDetails?
     public var delegate: GQPaymentDelegate?
     
     public var config: [String: Any]?
@@ -88,6 +90,28 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             newViewController.checkout_details = checkout_details
             newViewController.delegate = self
             self.present(newViewController, animated: true, completion: nil)
+        }else if(message.name == "sendPGOptions"){
+            let pg_option_object = convertStringToDictionary(text: message.body as! String)
+            
+            print("sendPGOptions: \(pg_option_object)")
+            
+            let name = pg_option_object!["name"]
+            if(name as! String == "CASHFREE"){
+                let pg_detail_object = convertStringToDictionary(text: pg_option_object!["pgOptions"]?.body as! String)
+                
+                let order_code = pg_detail_object!["order_code"]
+                let payment_session_id = pg_detail_object!["payment_session_id"]
+                
+                print("orderCode: \(order_code)")
+                print("paymentSessionId: \(payment_session_id)")
+                
+                cash_details = CashDetails(order_code: order_code as! String, payment_session_id: payment_session_id as! String)
+                
+                let newViewController = CashViewController()
+                newViewController.cash_details = cash_details
+                newViewController.delegate = self
+                self.present(newViewController, animated: true, completion: nil)
+            }
         }
         print("Received message from web -> \(message.body)")
     }
@@ -163,6 +187,14 @@ public class GrayQuestCheckoutVC: UIViewController, WKUIDelegate, WKScriptMessag
             delegate?.gqErrorResponse(error: true, message: error.localizedDescription)
             self.dismiss(animated: true, completion: nil)
         }
+    }
+    
+    func cashControllerSuccessResponse(data: [AnyHashable : Any]?) {
+        
+    }
+    
+    func cashControllerFailureResponse(data: [AnyHashable : Any]?) {
+       
     }
     
     public func validation1(config: [String: Any], auth: [String: String]) -> [String: String] {
